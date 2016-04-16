@@ -16,6 +16,25 @@ class NewVisitorTest(unittest.TestCase):
 
         #网页的标题和头部包含'to-do' 
         self.assertIn('to-do' , self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('to-do',header_text)
+
+        #应用邀请他输入一个待办事项
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(inputbox.get_attribute('placeholder'),'enter a to-do item')
+
+        #她在文本框输入“buy peacock feathers”
+        inputbox.send_keys('buy peacock feathers')
+
+        #她按回车界面更新，待办事项表格中显示‘1:buy peacock feathers’
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(any(row.text == '1:buy peacock feathers'))
+
+        #页面中又显示了文本框可以输入其他事项，她输入了‘use peacock feathers to make a fly’
+
         self.fail('finish the test!')
 
 if __name__ == '__main__':
