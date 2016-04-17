@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -15,13 +16,13 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
 
         #网页的标题和头部包含'to-do' 
-        self.assertIn('to-do' , self.browser.title)
+        self.assertIn('To-Do' , self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('to-do',header_text)
+        self.assertIn('To-Do',header_text)
 
         #应用邀请他输入一个待办事项
         inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertEqual(inputbox.get_attribute('placeholder'),'enter a to-do item')
+        self.assertEqual(inputbox.get_attribute('placeholder'),'Enter a to-do item')
 
         #她在文本框输入“buy peacock feathers”
         inputbox.send_keys('buy peacock feathers')
@@ -31,7 +32,7 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1:buy peacock feathers'))
+        self.assertTrue(any(row.text == '1:buy peacock feathers' for row in rows),"new to-do item did not appear in table")
 
         #页面中又显示了文本框可以输入其他事项，她输入了‘use peacock feathers to make a fly’
 
